@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<RentalKendaraan_109.Models.Pengembalian>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pengembalian";
 }
 
-<h2>Index</h2>
+<h2>Pengembalian</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Tambah Data Baru</a>
 </p>
 <table class="table">
     <thead>
@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.IdPeminjamanNavigation.IdPeminjaman)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdPengembalian">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.IdPengembalian"><i class="fa fa-marker fa-lg"></i></a> |
                 <a asp-action="Details" asp-route-id="@item.IdPengembalian">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.IdPengembalian">Delete</a>
             </td>
