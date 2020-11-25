@@ -19,10 +19,74 @@ namespace RentalKendaraan_109.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ktsd, string searchString, string currentFilter, int? pageNumber, string sortOrder)
         {
-            var rentKendaraanContext = _context.Customer.Include(c => c.IdGenderNavigation);
-            return View(await rentKendaraanContext.ToListAsync());
+            //Buat list menyimpan ketersediaan
+            var ktsdList = new List<string>();
+
+            //Query mengambil data
+            var ktsdQuery = from d in _context.Customer orderby d.NamaCustomer select d.NamaCustomer;
+            ktsdList.AddRange(ktsdQuery.Distinct());
+
+            //Untuk menampilkan di view
+            ViewBag.ktsd = new SelectList(ktsdList);
+
+            //Panggil db content
+            var menu = from m in _context.Customer.Include(k => k.IdGenderNavigation) select m;
+
+            //Untuk memilih dropdownlist ketersediaan
+            if (!string.IsNullOrEmpty(ktsd))
+            {
+                menu = menu.Where(x => x.NamaCustomer == ktsd);
+            }
+
+            //Untuk search data
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                menu = menu.Where(s => s.NamaCustomer.Contains(searchString) || s.Nik.Contains(searchString)
+                || s.Alamat.Contains(searchString));
+            }
+
+            //Membuat pagelist
+            ViewData["CurentSort"] = sortOrder;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            //Untuk Sorting
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Data" ? "date_desc" : "Date";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    menu = menu.OrderByDescending(s => s.NamaCustomer);
+                    break;
+                case "Date":
+                    menu = menu.OrderBy(s => s.Nik);
+                    break;
+                case "date_desc":
+                    menu = menu.OrderByDescending(s => s.Nik);
+                    break;
+                default: //name ascending
+                    menu = menu.OrderBy(s => s.NamaCustomer);
+                    break;
+            }
+
+            //Definisi jumlah data pada halaman
+            int pageSize = 5;
+            return View(await PaginatedList<Customer>.CreateAsync(menu.AsNoTracking(), pageNumber ?? 1, pageSize));
+            
+            //var rentKendaraanContext = _context.Customer.Include(c => c.IdGenderNavigation);
+            //return View(await rentKendaraanContext.ToListAsync());
         }
 
         // GET: Customers/Details/5
