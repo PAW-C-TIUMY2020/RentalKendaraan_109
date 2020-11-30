@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NamaCustomer" class="control-label"></label>
+                <label asp-for="NamaCustomer" class="control-label">Nama Customer</label>
                 <input asp-for="NamaCustomer" class="form-control" />
                 <span asp-validation-for="NamaCustomer" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Nik" class="control-label"></label>
+                <label asp-for="Nik" class="control-label">NIK</label>
                 <input asp-for="Nik" class="form-control" />
                 <span asp-validation-for="Nik" class="text-danger"></span>
             </div>
@@ -28,13 +28,13 @@
                 <span asp-validation-for="Alamat" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NoHp" class="control-label"></label>
+                <label asp-for="NoHp" class="control-label">No HP</label>
                 <input asp-for="NoHp" class="form-control" />
                 <span asp-validation-for="NoHp" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdGender" class="control-label"></label>
-                <select asp-for="IdGender" class ="form-control" asp-items="ViewBag.IdGender"></select>
+                <label asp-for="IdGenderNavigation.NamaGender" class="control-label">Gender</label>
+                <select asp-for="IdGenderNavigation.NamaGender" class ="form-control" asp-items="ViewBag.NamaGender"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
